@@ -4,13 +4,13 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SpatialPartitioning
+namespace SpatialPartitioning.Quadtree
 {
 
-    public sealed class Quadtree // the generic constraint is because the Insert and Find methods need some way to access the generic object's bounding volume.
+    public sealed class Quadtree
     {
 		// Members
-        private QuadtreeNode root;
+        private readonly QuadtreeNode root;
         public readonly int maxItems;
         public readonly int maxLevels;
 
@@ -93,12 +93,22 @@ namespace SpatialPartitioning
 			
 			q.Enqueue(root);
 
-            // TODO: queue up the tree then do stuff to it
+            // TODO: queue up the node then do stuff to it
 		}
 		
+        public override string ToString()
+        {
+            return root.ToString();
+        }
+
         public void DebugDisplayNodes()
         {
             root.TraverseDepthFirstPreOrder(root.DebugDisplayNodes);
+        }
+
+        public string DisplayItems()
+        {
+            return "";
         }
     }
 }

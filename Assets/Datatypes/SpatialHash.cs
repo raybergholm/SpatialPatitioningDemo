@@ -4,14 +4,14 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SpatialPartitioning
+namespace SpatialPartitioning.SpatialHash
 {
 	// works with point-like structures and AABB bounding volumes. Use Vector3 arguments for point-likes, or Bounds for AABB. Since bounding volumes occupy a volume of space, they can occupy multiple buckets, while point-likes can only occupy one at a time
 	
-	public sealed class SpatialHash // unlike the quadtree, this is inherently 3D since it accepts keys from Vector3
+	public sealed class SpatialHash
 	{
 		private Hashtable buckets;
-		// granularity controls: number of cells = dimension length / bucketSize. This also implies that the last cell being used as a key can be a smaller cell than the others
+		// granularity controls: number of cells = dimension length / bucketSize.
 		private int bucketSizeX;		
 		private int bucketSizeY;	
 		private int bucketSizeZ;	
@@ -24,11 +24,11 @@ namespace SpatialPartitioning
 			buckets = new Hashtable();
 		}
 		
-		public SpatialHash(int bucketSizeX, int bucketSizeY, int bucketSizeZ) // buckets will be whatever size specified
+		public SpatialHash(Vector3 bucketSize) // buckets will be whatever size specified
 		{
-			this.bucketSizeX = bucketSizeX;
-			this.bucketSizeY = bucketSizeY;
-			this.bucketSizeZ = bucketSizeZ;
+			this.bucketSizeX = (int)bucketSize.x;
+			this.bucketSizeY = (int)bucketSize.y;
+			this.bucketSizeZ = (int)bucketSize.z;
 			buckets = new Hashtable();
 		}
 		
@@ -44,15 +44,7 @@ namespace SpatialPartitioning
 		
 		public int itemCount
 		{
-			get
-            {
-                int count = 0;
-                foreach (List<GameObject> bucket in buckets)
-                {
-                    count += bucket.Count;
-                }
-                return count;
-            }
+			get { int count = 0; foreach(List<GameObject> bucket in buckets){ count += bucket.Count; } return count; }
 		} // TODO: YAGNI?
 
 		public bool Contains(Vector3 position)
@@ -76,24 +68,6 @@ namespace SpatialPartitioning
                 return false;
             }
         }
-		
-		/* // TODO: might not be necessary?
-        public bool Contains(GameObject item)
-        {
-			Bounds bounds = item.GetComponent<Collider>().bounds;
-			List<string> keys = ToKeys(bounds);
-			
-            if (buckets.Contains(keys)) // TODO: reformulate?
-            {
-                List<GameObject> bucket = (List<GameObject>)buckets[key];
-                return bucket.Contains(item);
-            }
-            else
-            {
-                return false;
-            }
-        }
-		*/
 		
 		public string ToKey(Vector3 position)
 		{
@@ -222,5 +196,10 @@ namespace SpatialPartitioning
 			Remove(removeFrom, item);
 			Insert(insertTo, item);
 		}
-	}
+
+        public string DisplayItems()
+        {
+            return "";
+        }
+    }
 }

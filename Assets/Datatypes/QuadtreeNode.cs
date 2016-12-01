@@ -4,7 +4,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SpatialPartitioning
+namespace SpatialPartitioning.Quadtree
 {
 	
 	public class QuadtreeNode
@@ -19,16 +19,13 @@ namespace SpatialPartitioning
         protected QuadtreeNode[] children;   // recursive, each node may have child nodes
 		
 		// Constants
-		public static readonly int NodeCount = 4;	// Quadtrees have 4 child nodes. Changing this would change the tree type
+		private const int NODE_COUNT = 4;	// Quadtrees have 4 child nodes. Changing this would change the tree type
 		
 		// change this to allow more items in the parent node before assigning child nodes
         public static int MaxItems { get; set; }
 
         // change this to control the Quadtree depth. Deeper = more granularity, but consider the expected size of objects compared to the cell sizes!
         public static int MaxLevels { get; set; }
-		
-        // enums
-        public enum Quadrants { Northeast, Northwest, Southwest, Southeast };
 		
 		
         // Constructors
@@ -39,14 +36,17 @@ namespace SpatialPartitioning
 			this.level = level;
 			this.parent = parent;
 			
+			children = new QuadtreeNode[QuadtreeNode.NODE_COUNT];
+			
 			this.id = this.parent != null ? this.parent.id + "_" + id : "root";
         }
 
+        #region Items
         public void Insert(GameObject item)
         {
             if (!IsLeaf())
             {
-                int quadrant = MatchQuadrant(item.GetComponent<Collider>().bounds); // FIXME: some way to get the bounding volume attached to a game object?
+                int quadrant = MatchQuadrant(item.GetComponent<Collider>().bounds);
                 
                 if (quadrant > -1)
                 {
@@ -89,7 +89,6 @@ namespace SpatialPartitioning
 			return items.Count == GetCount(); // if current node item count == current node + all descendants' item counts, then descendants are empty
 		}
 		
-		
 		public int GetCount()
 		{
 			int count = items.Count;
@@ -105,37 +104,22 @@ namespace SpatialPartitioning
 			return count;
 		}
 
-        public QuadtreeNode GetNode(Bounds target)
-        {
-            if(!IsLeaf())
-            {
-                for(int i = 0; i < children.Length; i++)
-                {
-                    if(children[i].IsEnclosing(target))
-                    {
-                        return children[i].GetNode(target);
-                    }
-                }
-            }
-            return this;
-        }
-
         // basically, give a target AABB and this method returns all objects in nodes which overlap the AABB.
         public List<GameObject> GetItemsByArea(Bounds target) // the list return by the initial call contains objects from all nodes which overlap the given target area
-		{
-			List<GameObject> collisionCandidates = new List<GameObject>();
-			// use IsOverlapping and going deeper into children
-			if(!IsLeaf())
-			{
-				for(int i = 0; i < children.Length; i++)
-				{
-					if(children[i].IsOverlapping(target))
-					{
-						collisionCandidates.AddRange(children[i].GetItemsByArea(target)); // in-order traversal: add the items which overlap the target bounds
-					}
-					
-				}
-			}
+        {
+            List<GameObject> collisionCandidates = new List<GameObject>();
+            // use IsOverlapping and going deeper into children
+            if (!IsLeaf())
+            {
+                for (int i = 0; i < children.Length; i++)
+                {
+                    if (children[i].IsOverlapping(target))
+                    {
+                        collisionCandidates.AddRange(children[i].GetItemsByArea(target)); // in-order traversal: add the items which overlap the target bounds
+                    }
+
+                }
+            }
 
             if (!IsOutOfBounds(target))
             {
@@ -152,10 +136,28 @@ namespace SpatialPartitioning
         {
             items.Clear();
         }
+        #endregion
+
+        public QuadtreeNode GetNode(Bounds target)
+        {
+            if(!IsLeaf())
+            {
+                for(int i = 0; i < children.Length; i++)
+                {
+                    if(children[i].IsEnclosing(target))
+                    {
+                        return children[i].GetNode(target);
+                    }
+                }
+            }
+            return this;
+        }
+
+        
 
         public bool IsLeaf()
         {
-            return children == null; // all child nodes are instantiated or removed together, so to test if this is a leaf, checking just the first child is sufficient.
+            return children[0] == null; // all child nodes are instantiated or removed together, so to test if this is a leaf, just checking if the first child is null is sufficient
         }
 
         public void RemoveChildren()
@@ -205,6 +207,8 @@ namespace SpatialPartitioning
             return index;
         }
 
+        #region Bounds checking
+
         public bool IsEnclosing(Bounds target) // return true if the target is entirely within this.bounds
         {
             return !(target.center.x - target.extents.x < bounds.center.x - bounds.extents.x ||
@@ -215,7 +219,7 @@ namespace SpatialPartitioning
 		
 		public bool IsOverlapping(Bounds target) // return true if any part of the target is inside this.bounds
 		{
-			// TODO: reformulate, this is not quite right
+			// TODO: check if this needs to be reformulated, this is not quite right?
             return (target.center.x - target.extents.x < bounds.center.x + bounds.extents.x &&
 				target.center.y - target.extents.y < bounds.center.y + bounds.extents.y) ||
 				(target.center.x + target.extents.x < bounds.center.x - bounds.extents.x &&
@@ -229,14 +233,13 @@ namespace SpatialPartitioning
 				target.center.x + target.extents.x < bounds.center.x - bounds.extents.x ||
 				target.center.y + target.extents.y < bounds.center.y - bounds.extents.y;
 		}
+        #endregion
 
         public void Split()
         {
             if (IsLeaf() && level < MaxLevels)
             {
                 Vector3 childSize = bounds.extents / 2;
-
-                children = new QuadtreeNode[QuadtreeNode.NodeCount];
 
                 children[(int)Quadrants.Northeast] = new QuadtreeNode(new Bounds(new Vector3(bounds.center.x + childSize.x / 2, bounds.center.y - childSize.y / 2, 0), childSize), level + 1, id, this);
 				children[(int)Quadrants.Northwest] = new QuadtreeNode(new Bounds(new Vector3(bounds.center.x - childSize.x / 2, bounds.center.y - childSize.y / 2, 0), childSize), level + 1, id, this);
@@ -247,7 +250,7 @@ namespace SpatialPartitioning
 
                 foreach(GameObject item in items)
                 {
-                    quadrant = MatchQuadrant(item.GetComponent<Collider>().bounds); // FIXME: some way to get the bounding volume attached to a game object?
+                    quadrant = MatchQuadrant(item.GetComponent<Collider>().bounds);
                     if (quadrant > -1)
                     {
                         Remove(item);
@@ -270,15 +273,16 @@ namespace SpatialPartitioning
             }
 			return count;
 		}
-		
-		public void TraverseDepthFirstPreOrder(Func<int> delegateMethod)
+
+        #region Tree traversal
+        public void TraverseDepthFirstPreOrder(Func<int> delegateMethod)
 		{
             delegateMethod();
             if (!IsLeaf())
             {
                 foreach (QuadtreeNode child in children)
                 {
-                    child.Traverse();
+                    child.TraverseDepthFirstPreOrder(delegateMethod);
                 }
             }
 		}
@@ -289,7 +293,7 @@ namespace SpatialPartitioning
             {
                 foreach (QuadtreeNode child in children)
                 {
-                    child.Traverse();
+                    child.TraverseDepthFirstInOrder(delegateMethod);
                     delegateMethod();
                 }
             }
@@ -301,53 +305,37 @@ namespace SpatialPartitioning
             {
                 foreach (QuadtreeNode child in children)
                 {
-                    child.Traverse();
+                    child.TraverseDepthFirstPostOrder(delegateMethod);
                 }
             }
             delegateMethod();
 		}
-		
-		// TODO: maybe bad form to have something this generic?
-        public void Traverse(Func<int> preOrderDelegate = null, Func<int> inOrderDelegate = null, Func<int> postOrderDelegate = null)
-        {
-			if(preOrderDelegate != null)
-			{
-				preOrderDelegate();
-			}
+        #endregion
 
-            if (!IsLeaf())
-            {
-                foreach (QuadtreeNode child in children)
-                {
-                    child.Traverse();
-					if(inOrderDelegate != null)
-					{
-						inOrderDelegate();
-					}
-                }
-            }
-            // insert callback here for post-order
-			if(postOrderDelegate != null)
-			{
-				postOrderDelegate();
-			}
+        #region Debug
+        public bool AssetItemsInBounds()
+        {
+
+            return true;
         }
 
-		public int DebugDisplayNodes()
+		public int DebugDisplayNodes() // TODO: check if this work
 		{	
             foreach(GameObject item in items)
             {
-				string lvl = level;
+				int lvl = level;
 				string offset = "";
 				
 				while(lvl > 0)
 				{
 					offset += ">";
+                    lvl--;
 				}
 				
                 Debug.Log(offset + " " + id, item);
             }
             return 0;
 		}
+        #endregion
     }
 }
