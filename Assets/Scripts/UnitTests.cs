@@ -279,25 +279,29 @@ public class TestSuite : MonoBehaviour
 		
 	public void StepQuadtreeTestAdd()
 	{
-        GameObject item = GameObject.CreatePrimitive(PrimitiveType.Sphere); // create one new object
-		item.transform.position = GenerateRandomPosition(gamePlaneBounds);
+        // TODO: instantiate from prefab instead
+
+        //GameObject item = GameObject.CreatePrimitive(PrimitiveType.Sphere); // create one new object
+		//item.transform.position = GenerateRandomPosition(gamePlaneBounds);
 			
-		objectList.Add(item);
-		quadtree.Insert(item);
-		Debug.Log(item.transform.position);
-		Debug.Log(quadtree.DisplayItems());
+		//objectList.Add(item);
+		//quadtree.InsertItem(item);
+		//Debug.Log(item.transform.position);
+		//Debug.Log(quadtree.DisplayItems());
 	}
 		
 	public void StepQuadtreeGridTestAdd()
 	{
-        GameObject item = GameObject.CreatePrimitive(PrimitiveType.Sphere); // create one new object
-		item.transform.position = GenerateGridPosition(gamePlaneBounds);
-			
-		objectList.Add(item);
-		quadtree.Insert(item);
-		Debug.Log(item.transform.position);
-		Debug.Log(quadtree.DisplayItems());
-	}
+        // TODO: instantiate from prefab instead
+
+        //GameObject item = GameObject.CreatePrimitive(PrimitiveType.Sphere); // create one new object
+        //item.transform.position = GenerateGridPosition(gamePlaneBounds);
+
+        //objectList.Add(item);
+        //quadtree.InsertItem(item);
+        //Debug.Log(item.transform.position);
+        //Debug.Log(quadtree.DisplayItems());
+    }
 		
 	public void StepSpatialHashTestAdd()
 	{
@@ -324,7 +328,7 @@ public class TestSuite : MonoBehaviour
 	public void StepTestRemove()
 	{
 		GameObject item = objectList[objectList.Count];
-		quadtree.Remove(item);
+		//quadtree.RemoveItem(item);
 		objectList.Remove(item);
 		Debug.Log(item.transform.position);
 		Debug.Log(quadtree.DisplayItems());
@@ -338,7 +342,7 @@ public class TestSuite : MonoBehaviour
 
 		foreach (GameObject item in objectList)
         {
-            quadtree.Insert(item);
+            //quadtree.InsertItem(item);
         }
 		quadtree.DebugDisplayNodes();
 	}
@@ -358,7 +362,7 @@ public class TestSuite : MonoBehaviour
 			
 		foreach (GameObject item in objectList)
         {
-            quadtree.Insert(item);
+            //quadtree.InsertItem(item);
         }
 		quadtree.DebugDisplayNodes();
 	}
@@ -369,7 +373,7 @@ public class TestSuite : MonoBehaviour
 			
 		foreach (GameObject item in objectList)
         {
-            quadtree.Insert(item);
+            //quadtree.InsertItem(item);
         }
 		quadtree.DebugDisplayNodes();
 	}
@@ -378,4 +382,18 @@ public class TestSuite : MonoBehaviour
 	{
 		
 	}
+
+    public Vector3 GetRandom2dVector()
+    {
+        // keep all the generated vectors within a circle, having x = [a, b], y = [a, b] makes the vectors more biased towards a faster diagonal magnitude which will look weird
+
+        float direction = UnityEngine.Random.Range(0, 359 * Mathf.Deg2Rad); // 0 to 359 degrees -> 0 to almost 2pi radians
+        float magnitude = UnityEngine.Random.Range(1, 10);      // every object should be in motion
+
+        float xComponent = magnitude * Mathf.Cos(direction);
+        float yComponent = magnitude * Mathf.Sin(direction);
+
+        return new Vector3(xComponent, yComponent, 0);
+
+    }
 }
