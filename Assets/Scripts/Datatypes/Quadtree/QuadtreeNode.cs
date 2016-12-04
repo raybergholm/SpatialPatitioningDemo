@@ -17,8 +17,8 @@ namespace SpatialPartitioning.Quadtree
             private readonly int level;
             private readonly QuadtreeNode parentNode;
 
-            private List<IMobileEntity> items;
-            public List<IMobileEntity> Items { get { return items; } }
+            private List<CollidableEntity> items;
+            public List<CollidableEntity> Items { get { return items; } }
 
             private QuadtreeNode[] children;   // recursive, each node may have child nodes
             public QuadtreeNode[] Children { get { return children; } }
@@ -31,7 +31,7 @@ namespace SpatialPartitioning.Quadtree
             // Constructors
             public QuadtreeNode(Quadtree owner, Bounds bounds, int level, string id = "", QuadtreeNode parentNode = null)
             {
-                items = new List<IMobileEntity>();
+                items = new List<CollidableEntity>();
                 this.owner = owner;
                 this.bounds = bounds;
                 this.level = level;
@@ -44,11 +44,11 @@ namespace SpatialPartitioning.Quadtree
             }
 
             #region Items
-            public void InsertItem(IMobileEntity item)
+            public void InsertItem(CollidableEntity item)
             {
                 if (!IsLeaf())
                 {
-                    int quadrant = MatchQuadrant(item.GetBounds());
+                    int quadrant = MatchQuadrant(item.GetAABB());
 
                     if (quadrant > -1)
                     {
@@ -65,7 +65,7 @@ namespace SpatialPartitioning.Quadtree
                 }
             }
 
-            public bool RemoveItem(IMobileEntity item)
+            public bool RemoveItem(CollidableEntity item)
             {
                 bool returnValue = items.Remove(item);
 
@@ -81,7 +81,7 @@ namespace SpatialPartitioning.Quadtree
                 items.Clear();
             }
 
-            public bool Contains(IMobileEntity item)
+            public bool Contains(CollidableEntity item)
             {
                 return items.Contains(item);
             }
@@ -107,9 +107,9 @@ namespace SpatialPartitioning.Quadtree
             }
 
             // basically, give a target AABB and this method returns all objects in nodes which overlap the AABB.
-            public List<IMobileEntity> GetItemsByArea(Bounds target) // the list return by the initial call contains objects from all nodes which overlap the given target area
+            public List<CollidableEntity> GetItemsByArea(Bounds target) // the list return by the initial call contains objects from all nodes which overlap the given target area
             {
-                List<IMobileEntity> collisionCandidates = new List<IMobileEntity>();
+                List<CollidableEntity> collisionCandidates = new List<CollidableEntity>();
                 // use IsOverlapping and going deeper into children
                 if (!IsLeaf())
                 {
@@ -130,7 +130,7 @@ namespace SpatialPartitioning.Quadtree
                 }
                 else
                 {
-                    return new List<IMobileEntity>();
+                    return new List<CollidableEntity>();
                 }
             }
 
@@ -250,9 +250,9 @@ namespace SpatialPartitioning.Quadtree
 
                     int quadrant;
 
-                    foreach (IMobileEntity item in items)
+                    foreach (CollidableEntity item in items)
                     {
-                        quadrant = MatchQuadrant(item.GetBounds());
+                        quadrant = MatchQuadrant(item.GetAABB());
                         if (quadrant > -1)
                         {
                             RemoveItem(item);
@@ -319,7 +319,7 @@ namespace SpatialPartitioning.Quadtree
             {
                 for (int i = 0; i < items.Count; i++)
                 {
-                    if (IsOutOfBounds(items[i].GetBounds()))
+                    if (IsOutOfBounds(items[i].GetAABB()))
                     {
                         return false;
                     }

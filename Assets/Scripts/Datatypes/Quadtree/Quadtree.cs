@@ -47,9 +47,9 @@ namespace SpatialPartitioning.Quadtree
             return root.IsOutOfBounds(target) ? null : root.GetNode(target);
         }
 
-        public List<IMobileEntity> GetItems()
+        public List<CollidableEntity> GetItems()
         {
-            return new List<IMobileEntity>(); // TODO: method not finished
+            return new List<CollidableEntity>(); // TODO: method not finished
         }
 
         //public List<QuadtreeNode> GetOverlappingNodes(Bounds target)
@@ -72,17 +72,17 @@ namespace SpatialPartitioning.Quadtree
         //    return nodes;
         //}
 
-        public void InsertItem(IMobileEntity item)
+        public void InsertItem(CollidableEntity item)
         {
             root.InsertItem(item);
         }
 
-        public bool RemoveItem(IMobileEntity item)
+        public bool RemoveItem(CollidableEntity item)
         {
             return root.RemoveItem(item);
         }
 
-        public List<IMobileEntity> GetItemsByArea(Bounds target)
+        public List<CollidableEntity> GetItemsByArea(Bounds target)
         {
             return root.GetItemsByArea(target);
         }
