@@ -11,17 +11,17 @@ namespace SpatialPartitioning
 {
     public class CollidableEntity : MonoBehaviour
     {
-        private Bounds AABB;
-        private Vector3 vector;
+        protected Bounds aabb;
+        protected Vector3 vector;
 
         public CollidableEntity(Bounds bounds)
         {
-            AABB = bounds;
+            aabb = bounds;
         }
 
         public Bounds GetAABB()
         {
-            return AABB;
+            return aabb;
         }
         
         public BaseBoundingVolume GetBoundingVolume()
