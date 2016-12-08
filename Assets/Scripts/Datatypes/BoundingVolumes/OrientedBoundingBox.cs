@@ -2,10 +2,9 @@
 
 namespace SpatialPartitioning.BoundingVolumes
 {
-    public class OrientedBoundingBox : BaseBoundingVolume
+    public struct OrientedBoundingBox
     {
-        protected Bounds aabb;
-        protected float angle;
-
+        public Bounds AABB;
+        public float AngleRadians;
     }
 }

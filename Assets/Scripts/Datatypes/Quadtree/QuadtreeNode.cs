@@ -48,7 +48,7 @@ namespace SpatialPartitioning.Quadtree
             {
                 if (!IsLeaf())
                 {
-                    int quadrant = MatchQuadrant(item.GetAABB());
+                    int quadrant = MatchQuadrant(item.AABB);
 
                     if (quadrant > -1)
                     {
@@ -252,7 +252,7 @@ namespace SpatialPartitioning.Quadtree
 
                     foreach (CollidableEntity item in items)
                     {
-                        quadrant = MatchQuadrant(item.GetAABB());
+                        quadrant = MatchQuadrant(item.AABB);
                         if (quadrant > -1)
                         {
                             RemoveItem(item);
@@ -319,7 +319,7 @@ namespace SpatialPartitioning.Quadtree
             {
                 for (int i = 0; i < items.Count; i++)
                 {
-                    if (IsOutOfBounds(items[i].GetAABB()))
+                    if (IsOutOfBounds(items[i].AABB))
                     {
                         return false;
                     }

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using UnityEngine;
 
 namespace SpatialPartitioning.BoundingVolumes
 {
-    public class Circle : BaseBoundingVolume
+    public struct Circle
     {
-        protected float radius;
-
-
+        public Vector3 Origin;
+        public float Radius;
     }
 }

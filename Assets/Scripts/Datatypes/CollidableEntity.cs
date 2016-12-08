@@ -12,21 +12,24 @@ namespace SpatialPartitioning
     public class CollidableEntity : MonoBehaviour
     {
         protected Bounds aabb;
-        protected Vector3 vector;
+        public Bounds AABB { get { return aabb; } }
 
-        public CollidableEntity(Bounds bounds)
+        protected Vector3 movementVector;
+        public Vector3 MovementVector { get { return movementVector; } }
+
+        protected virtual void Awake()
         {
-            aabb = bounds;
+            aabb = new Bounds(gameObject.transform.position, new Vector3()); // TODO: best way to assign the proper size based on the attached game object?
         }
 
-        public Bounds GetAABB()
+        protected virtual void Start()
         {
-            return aabb;
+
         }
-        
-        public BaseBoundingVolume GetBoundingVolume()
+
+        protected virtual void Update()
         {
-            return new BaseBoundingVolume();
+
         }
     }
 }
