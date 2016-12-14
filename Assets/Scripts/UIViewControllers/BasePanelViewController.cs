@@ -8,7 +8,12 @@ public class BasePanelViewController : MonoBehaviour {
     public static event BasePanelDelegate PanelShown;
     public static event BasePanelDelegate PanelHidden;
 
-    public void Toggle()
+    public virtual void Init()
+    {
+
+    }
+
+    public virtual void ToggleVisibility()
     {
         if(!gameObject.activeSelf)
         {
@@ -20,7 +25,7 @@ public class BasePanelViewController : MonoBehaviour {
         }
     }
 
-    public void Show()
+    public virtual void Show()
     {
         gameObject.SetActive(true);
 
@@ -30,7 +35,7 @@ public class BasePanelViewController : MonoBehaviour {
         }
     }
 
-    public void Hide()
+    public virtual void Hide()
     {
         gameObject.SetActive(false);
 

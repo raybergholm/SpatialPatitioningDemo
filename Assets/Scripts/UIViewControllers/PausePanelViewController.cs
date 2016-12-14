@@ -27,16 +27,22 @@ namespace SpatialPartitioning
 
         }
 
+        public override void Init()
+        {
+            AssignCallbacks();
+            Debug.Log("pausePanel active");
+        }
+
         private void AssignCallbacks()
         {
-            SimulationViewController.ShowPauseMenu += OnShowPauseMenu;
-            SimulationViewController.HidePauseMenu += OnHidePauseMenu;
+            SimulationController.ShowPauseMenu += OnShowPauseMenu;
+            SimulationController.HidePauseMenu += OnHidePauseMenu;
         }
 
         private void RemoveCallbacks()
         {
-            SimulationViewController.ShowPauseMenu -= OnShowPauseMenu;
-            SimulationViewController.HidePauseMenu -= OnHidePauseMenu;
+            SimulationController.ShowPauseMenu -= OnShowPauseMenu;
+            SimulationController.HidePauseMenu -= OnHidePauseMenu;
         }
 
         private void OnShowPauseMenu()
