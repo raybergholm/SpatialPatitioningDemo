@@ -3,8 +3,15 @@ using System.Collections;
 
 namespace SpatialPartitioning
 {
-    public class SimulationViewController : MonoBehaviour
+    public class SimulationController : MonoBehaviour
     {
+        [SerializeField]
+        private OptionsPanelViewController optionsMenu;
+        [SerializeField]
+        private PausePanelViewController pauseMenu;
+
+        private SimulationModel model;
+
         public delegate void PanelCallDelegate();
 
         public static event PanelCallDelegate ShowOptionsMenu;
@@ -12,19 +19,28 @@ namespace SpatialPartitioning
         public static event PanelCallDelegate ShowPauseMenu;
         public static event PanelCallDelegate HidePauseMenu;
 
-        SimulationModel model;
-
         private void Awake()
         {
             model = this.GetComponent<SimulationModel>();
 
+            if (optionsMenu != null)
+            {
+                optionsMenu.Init();
+            }
+
+            if (pauseMenu != null)
+            {
+                pauseMenu.Init();
+            }
+
             AssignCallbacks();
+            Debug.Log("now active");
         }
 
         // Use this for initialization
         private void Start()
         {
-            
+
         }
 
         private void OnDestroy()
@@ -36,13 +52,13 @@ namespace SpatialPartitioning
         private void Update()
         {
 
-            if(Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 TogglePause();
             }
-            else if(Input.GetKeyDown(KeyCode.P))
+            else if (Input.GetKeyDown(KeyCode.P))
             {
-                if(ShowOptionsMenu != null)
+                if (ShowOptionsMenu != null)
                 {
                     ShowOptionsMenu();
                 }
@@ -85,7 +101,7 @@ namespace SpatialPartitioning
 
         public void TogglePause()
         {
-            if(Mathf.Approximately(Time.timeScale, 0.0f))
+            if (Mathf.Approximately(Time.timeScale, 0.0f))
             {
                 Resume();
             }
@@ -98,7 +114,7 @@ namespace SpatialPartitioning
         public void Pause()
         {
             Time.timeScale = 0.0f;
-            if(ShowPauseMenu != null)
+            if (ShowPauseMenu != null)
             {
                 ShowPauseMenu();
             }
@@ -109,7 +125,7 @@ namespace SpatialPartitioning
         public void Resume()
         {
             Time.timeScale = 1.0f;
-            if(HidePauseMenu != null)
+            if (HidePauseMenu != null)
             {
                 HidePauseMenu();
             }

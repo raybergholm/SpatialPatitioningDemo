@@ -28,17 +28,23 @@ namespace SpatialPartitioning
             
         }
 
+        public override void Init()
+        {
+            AssignCallbacks();
+            Debug.Log("optionsPanel active");
+        }
+
         private void AssignCallbacks()
         {
-            SimulationViewController.ShowOptionsMenu += OnShowOptionsMenu;
-            SimulationViewController.HideOptionsMenu += OnHideOptionsMenu;
+            SimulationController.ShowOptionsMenu += OnShowOptionsMenu;
+            SimulationController.HideOptionsMenu += OnHideOptionsMenu;
             
         }
 
         private void RemoveCallbacks()
         {
-            SimulationViewController.ShowOptionsMenu -= OnShowOptionsMenu;
-            SimulationViewController.HideOptionsMenu -= OnHideOptionsMenu;
+            SimulationController.ShowOptionsMenu -= OnShowOptionsMenu;
+            SimulationController.HideOptionsMenu -= OnHideOptionsMenu;
         }
 
         private void OnShowOptionsMenu()

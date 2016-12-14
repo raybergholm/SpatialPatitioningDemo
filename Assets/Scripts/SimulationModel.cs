@@ -4,11 +4,11 @@ namespace SpatialPartitioning
 {
     public class SimulationModel : MonoBehaviour
     {
-        SimulationViewController viewController;
+        SimulationController controller;
 
         private void Awake()
         {
-            viewController = this.GetComponent<SimulationViewController>();
+            controller = this.GetComponent<SimulationController>();
         }
 
         // Use this for initialization
