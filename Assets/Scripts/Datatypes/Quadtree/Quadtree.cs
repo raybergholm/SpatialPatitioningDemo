@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 namespace SpatialPartitioning.Quadtree
 {
-
     public partial class Quadtree
     {
         // Members
