@@ -12,13 +12,6 @@ namespace SpatialPartitioning
 
         private SimulationModel model;
 
-        public delegate void PanelCallDelegate();
-
-        public static event PanelCallDelegate ShowOptionsMenu;
-        public static event PanelCallDelegate HideOptionsMenu;
-        public static event PanelCallDelegate ShowPauseMenu;
-        public static event PanelCallDelegate HidePauseMenu;
-
         private void Awake()
         {
             model = this.GetComponent<SimulationModel>();
@@ -33,60 +26,40 @@ namespace SpatialPartitioning
                 pauseMenu.Init();
             }
 
-            AssignCallbacks();
-            Debug.Log("now active");
+            Debug.Log("SimulationController now active");
         }
 
         // Use this for initialization
         private void Start()
         {
-
+            StartCoroutine(ReportStillAlive());
         }
 
         private void OnDestroy()
         {
-            RemoveCallbacks();
+
         }
 
         // Update is called once per frame
         private void Update()
         {
-
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 TogglePause();
             }
             else if (Input.GetKeyDown(KeyCode.P))
             {
-                if (ShowOptionsMenu != null)
-                {
-                    ShowOptionsMenu();
-                }
-
-                Debug.Log("trying options menu");
+                ToggleOptionsMenu();
             }
         }
 
-        private void AssignCallbacks()
+        private IEnumerator ReportStillAlive()
         {
-            OptionsPanelViewController.PanelShown += OnOptionsPanelShown;
-            OptionsPanelViewController.PanelHidden += OnOptionsPanelHidden;
-        }
-
-        private void RemoveCallbacks()
-        {
-            OptionsPanelViewController.PanelShown -= OnOptionsPanelShown;
-            OptionsPanelViewController.PanelHidden -= OnOptionsPanelHidden;
-        }
-
-        private void OnOptionsPanelShown()
-        {
-            Pause();
-        }
-
-        private void OnOptionsPanelHidden()
-        {
-            Resume();
+            while (true)
+            {
+                Debug.Log(string.Format("I'm alive, timescale: {0}", Time.timeScale));
+                yield return new WaitForSeconds(3.0f);
+            }
         }
 
         public void StartSimulation()
@@ -99,38 +72,51 @@ namespace SpatialPartitioning
 
         }
 
-        public void TogglePause()
+        public void TogglePause(bool showPauseMenu = true)
         {
             if (Mathf.Approximately(Time.timeScale, 0.0f))
             {
-                Resume();
+                Resume(showPauseMenu);
             }
             else
             {
-                Pause();
+                Pause(showPauseMenu);
             }
         }
 
-        public void Pause()
+        public void ToggleOptionsMenu()
+        {
+            if (optionsMenu != null)
+            {
+                if (!optionsMenu.IsVisible)
+                {
+                    optionsMenu.Show();
+                    Pause(false);
+                }
+                else
+                {
+                    optionsMenu.Hide();
+                    Resume(false);
+                }
+            }
+        }
+
+        public void Pause(bool showPauseMenu = true)
         {
             Time.timeScale = 0.0f;
-            if (ShowPauseMenu != null)
+            if (pauseMenu != null && showPauseMenu)
             {
-                ShowPauseMenu();
+                pauseMenu.Show();
             }
-
-            Debug.Log("trying to pause");
         }
 
-        public void Resume()
+        public void Resume(bool showPauseMenu = true)
         {
             Time.timeScale = 1.0f;
-            if (HidePauseMenu != null)
+            if (pauseMenu != null && showPauseMenu)
             {
-                HidePauseMenu();
+                pauseMenu.Hide();
             }
-
-            Debug.Log("trying to resume");
         }
     }
 }

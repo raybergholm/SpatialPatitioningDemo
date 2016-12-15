@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BasePanelViewController : MonoBehaviour {
+public class BasePanelViewController : MonoBehaviour
+{
+    public bool IsVisible { get { return gameObject.activeSelf; } }
 
     public delegate void BasePanelDelegate();
 
@@ -15,7 +17,7 @@ public class BasePanelViewController : MonoBehaviour {
 
     public virtual void ToggleVisibility()
     {
-        if(!gameObject.activeSelf)
+        if (!gameObject.activeSelf)
         {
             Show();
         }
@@ -29,7 +31,7 @@ public class BasePanelViewController : MonoBehaviour {
     {
         gameObject.SetActive(true);
 
-        if(PanelShown != null)
+        if (PanelShown != null)
         {
             PanelShown();
         }
@@ -39,7 +41,7 @@ public class BasePanelViewController : MonoBehaviour {
     {
         gameObject.SetActive(false);
 
-        if(PanelHidden != null)
+        if (PanelHidden != null)
         {
             PanelHidden();
         }

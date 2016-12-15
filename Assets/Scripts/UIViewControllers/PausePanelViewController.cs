@@ -7,7 +7,7 @@ namespace SpatialPartitioning
     {
         private void Awake()
         {
-            AssignCallbacks();
+
         }
 
         // Use this for initialization
@@ -18,7 +18,7 @@ namespace SpatialPartitioning
 
         private void OnDestroy()
         {
-            RemoveCallbacks();
+
         }
 
         // Update is called once per frame
@@ -29,32 +29,18 @@ namespace SpatialPartitioning
 
         public override void Init()
         {
-            AssignCallbacks();
-            Debug.Log("pausePanel active");
+
+            Debug.Log("PausePanelViewController now active");
         }
 
-        private void AssignCallbacks()
+        public override void Show()
         {
-            SimulationController.ShowPauseMenu += OnShowPauseMenu;
-            SimulationController.HidePauseMenu += OnHidePauseMenu;
+            base.Show();
         }
 
-        private void RemoveCallbacks()
+        public override void Hide()
         {
-            SimulationController.ShowPauseMenu -= OnShowPauseMenu;
-            SimulationController.HidePauseMenu -= OnHidePauseMenu;
-        }
-
-        private void OnShowPauseMenu()
-        {
-            Debug.Log("show pause panel");
-            Show();
-        }
-
-        private void OnHidePauseMenu()
-        {
-            Debug.Log("hide pause panel");
-            Hide();
+            base.Hide();
         }
     }
 }

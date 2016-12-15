@@ -8,7 +8,7 @@ namespace SpatialPartitioning
 
         private void Awake()
         {
-            AssignCallbacks();
+
         }
 
         // Use this for initialization
@@ -19,7 +19,7 @@ namespace SpatialPartitioning
 
         private void OnDestroy()
         {
-            RemoveCallbacks();
+
         }
 
         // Update is called once per frame
@@ -30,33 +30,18 @@ namespace SpatialPartitioning
 
         public override void Init()
         {
-            AssignCallbacks();
-            Debug.Log("optionsPanel active");
+
+            Debug.Log("OptionsPanelViewController now active");
         }
 
-        private void AssignCallbacks()
+        public override void Show()
         {
-            SimulationController.ShowOptionsMenu += OnShowOptionsMenu;
-            SimulationController.HideOptionsMenu += OnHideOptionsMenu;
-            
+            base.Show();
         }
 
-        private void RemoveCallbacks()
+        public override void Hide()
         {
-            SimulationController.ShowOptionsMenu -= OnShowOptionsMenu;
-            SimulationController.HideOptionsMenu -= OnHideOptionsMenu;
-        }
-
-        private void OnShowOptionsMenu()
-        {
-            Debug.Log("show options panel");
-            Show();
-        }
-
-        private void OnHideOptionsMenu()
-        {
-            Debug.Log("hide options panel");
-            Hide();
+            base.Hide();
         }
     }
 }
