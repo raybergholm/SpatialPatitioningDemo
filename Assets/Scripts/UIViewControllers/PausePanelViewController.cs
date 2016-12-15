@@ -7,13 +7,13 @@ namespace SpatialPartitioning
     {
         private void Awake()
         {
-
+            Debug.Log("Awake called for Pause Panel");
         }
 
         // Use this for initialization
         private void Start()
         {
-
+            Debug.Log("Start called for Pause Panel");
         }
 
         private void OnDestroy()

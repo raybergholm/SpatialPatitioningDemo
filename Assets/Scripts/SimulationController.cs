@@ -12,9 +12,18 @@ namespace SpatialPartitioning
 
         private SimulationModel model;
 
+        private bool isPaused;
+        public bool IsPaused { get { return isPaused; } }
+
+        private float currentTimescale;
+
         private void Awake()
         {
             model = this.GetComponent<SimulationModel>();
+
+            isPaused = false;
+
+            currentTimescale = 1.0f;
 
             if (optionsMenu != null)
             {
@@ -32,7 +41,7 @@ namespace SpatialPartitioning
         // Use this for initialization
         private void Start()
         {
-            StartCoroutine(ReportStillAlive());
+
         }
 
         private void OnDestroy()
@@ -53,15 +62,6 @@ namespace SpatialPartitioning
             }
         }
 
-        private IEnumerator ReportStillAlive()
-        {
-            while (true)
-            {
-                Debug.Log(string.Format("I'm alive, timescale: {0}", Time.timeScale));
-                yield return new WaitForSeconds(3.0f);
-            }
-        }
-
         public void StartSimulation()
         {
 
@@ -74,13 +74,13 @@ namespace SpatialPartitioning
 
         public void TogglePause(bool showPauseMenu = true)
         {
-            if (Mathf.Approximately(Time.timeScale, 0.0f))
+            if (!isPaused)
             {
-                Resume(showPauseMenu);
+                Pause(showPauseMenu);
             }
             else
             {
-                Pause(showPauseMenu);
+                Resume();
             }
         }
 
@@ -96,7 +96,7 @@ namespace SpatialPartitioning
                 else
                 {
                     optionsMenu.Hide();
-                    Resume(false);
+                    Resume();
                 }
             }
         }
@@ -104,16 +104,18 @@ namespace SpatialPartitioning
         public void Pause(bool showPauseMenu = true)
         {
             Time.timeScale = 0.0f;
+            isPaused = true;
             if (pauseMenu != null && showPauseMenu)
             {
                 pauseMenu.Show();
             }
         }
 
-        public void Resume(bool showPauseMenu = true)
+        public void Resume()
         {
-            Time.timeScale = 1.0f;
-            if (pauseMenu != null && showPauseMenu)
+            Time.timeScale = currentTimescale;
+            isPaused = false;
+            if (pauseMenu != null && pauseMenu.IsVisible)
             {
                 pauseMenu.Hide();
             }
