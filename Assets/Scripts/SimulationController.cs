@@ -12,6 +12,9 @@ namespace SpatialPartitioning
 
         private SimulationModel model;
 
+        private TestScripts tests;
+        public TestScripts Tests { get { return tests; } }
+
         private bool isPaused;
         public bool IsPaused { get { return isPaused; } }
 
@@ -20,6 +23,7 @@ namespace SpatialPartitioning
         private void Awake()
         {
             model = this.GetComponent<SimulationModel>();
+            tests = this.GetComponent<TestScripts>();
 
             isPaused = false;
 
@@ -27,13 +31,15 @@ namespace SpatialPartitioning
 
             if (optionsMenu != null)
             {
-                optionsMenu.Init();
+                optionsMenu.Init(this);
             }
 
             if (pauseMenu != null)
             {
-                pauseMenu.Init();
+                pauseMenu.Init(this);
             }
+
+            
 
             Debug.Log("SimulationController now active");
         }

@@ -27,9 +27,9 @@ namespace SpatialPartitioning
 
         }
 
-        public override void Init()
+        public override void Init(SimulationController parentController)
         {
-
+            base.Init(parentController);
             Debug.Log("PausePanelViewController now active");
         }
 

@@ -1,49 +1,55 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BasePanelViewController : MonoBehaviour
+namespace SpatialPartitioning
 {
-    public bool IsVisible { get { return gameObject.activeSelf; } }
 
-    public delegate void BasePanelDelegate();
-
-    public static event BasePanelDelegate PanelShown;
-    public static event BasePanelDelegate PanelHidden;
-
-    public virtual void Init()
+    public class BasePanelViewController : MonoBehaviour
     {
+        protected SimulationController parentController;
 
-    }
+        public bool IsVisible { get { return gameObject.activeSelf; } }
 
-    public virtual void ToggleVisibility()
-    {
-        if (!gameObject.activeSelf)
+        public delegate void BasePanelDelegate();
+
+        public static event BasePanelDelegate PanelShown;
+        public static event BasePanelDelegate PanelHidden;
+
+        public virtual void Init(SimulationController parentController)
         {
-            Show();
+            this.parentController = parentController;
         }
-        else
+
+        public virtual void ToggleVisibility()
         {
-            Hide();
+            if (!gameObject.activeSelf)
+            {
+                Show();
+            }
+            else
+            {
+                Hide();
+            }
         }
-    }
 
-    public virtual void Show()
-    {
-        gameObject.SetActive(true);
-
-        if (PanelShown != null)
+        public virtual void Show()
         {
-            PanelShown();
+            gameObject.SetActive(true);
+
+            if (PanelShown != null)
+            {
+                PanelShown();
+            }
         }
-    }
 
-    public virtual void Hide()
-    {
-        gameObject.SetActive(false);
-
-        if (PanelHidden != null)
+        public virtual void Hide()
         {
-            PanelHidden();
+            gameObject.SetActive(false);
+
+            if (PanelHidden != null)
+            {
+                PanelHidden();
+            }
         }
     }
 }

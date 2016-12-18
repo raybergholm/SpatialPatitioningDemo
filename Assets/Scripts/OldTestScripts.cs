@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using SpatialPartitioning.Quadtree;
 using SpatialPartitioning.SpatialHash;
 
-public class TestSuite : MonoBehaviour
+public class OldTestScripts : MonoBehaviour
 {
 
     public enum Mode { NaiveArray, Quadtree, SpatialHash };
