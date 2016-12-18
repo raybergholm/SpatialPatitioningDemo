@@ -4,16 +4,16 @@ using System.Collections;
 namespace SpatialPartitioning
 {
 
-    public class BasePanelViewController : MonoBehaviour
+    public abstract class BasePanelViewController : MonoBehaviour
     {
         protected SimulationController parentController;
 
         public bool IsVisible { get { return gameObject.activeSelf; } }
 
-        public delegate void BasePanelDelegate();
+        public delegate void BasePanelEventHandler();
 
-        public static event BasePanelDelegate PanelShown;
-        public static event BasePanelDelegate PanelHidden;
+        public static event BasePanelEventHandler PanelShown;
+        public static event BasePanelEventHandler PanelHidden;
 
         public virtual void Init(SimulationController parentController)
         {

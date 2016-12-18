@@ -1,10 +1,19 @@
 ﻿using UnityEngine;
-using System.Collections;
+
+using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace SpatialPartitioning
 {
     public class SimulationController : MonoBehaviour
     {
+        enum DataStructureTypes
+        {
+            Quadtree,
+            SpatialHash
+        }
+
         [SerializeField]
         private OptionsPanelViewController optionsMenu;
         [SerializeField]
@@ -13,7 +22,6 @@ namespace SpatialPartitioning
         private SimulationModel model;
 
         private TestScripts tests;
-        public TestScripts Tests { get { return tests; } }
 
         private bool isPaused;
         public bool IsPaused { get { return isPaused; } }
@@ -22,8 +30,8 @@ namespace SpatialPartitioning
 
         private void Awake()
         {
-            model = this.GetComponent<SimulationModel>();
-            tests = this.GetComponent<TestScripts>();
+            model = GetComponent<SimulationModel>();
+            tests = GetComponent<TestScripts>();
 
             isPaused = false;
 
@@ -38,8 +46,6 @@ namespace SpatialPartitioning
             {
                 pauseMenu.Init(this);
             }
-
-            
 
             Debug.Log("SimulationController now active");
         }
@@ -68,14 +74,24 @@ namespace SpatialPartitioning
             }
         }
 
-        public void StartSimulation()
+        public List<string> GetDataStructures()
         {
-
+            return Enum.GetNames(typeof(DataStructureTypes)).ToList();
         }
 
-        private void ResetSimulation()
+        public List<string> GetTestList()
         {
+            return tests != null ? tests.GetManifest() : null;
+        }
 
+        public void StartSimulation()
+        {
+            Debug.Log("Simulation Started.");
+        }
+
+        public void ResetSimulation()
+        {
+            Debug.Log("Simulation Reset.");
         }
 
         public void TogglePause(bool showPauseMenu = true)

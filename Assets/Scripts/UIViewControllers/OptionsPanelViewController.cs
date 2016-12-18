@@ -1,15 +1,23 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+
 using System.Collections;
+using System.Collections.Generic;
 
 namespace SpatialPartitioning
 {
     public class OptionsPanelViewController : BasePanelViewController
     {
         [SerializeField]
-        private Button randomScatterTestButton;
+        private Dropdown dataStructureDropdown;
+
         [SerializeField]
-        private Button gridTestButton;
+        private Dropdown testSelectionDropdown;
+
+        [SerializeField]
+        private Button startButton;
+        [SerializeField]
+        private Button resetButton;
 
         private void Awake()
         {
@@ -19,22 +27,40 @@ namespace SpatialPartitioning
         // Use this for initialization
         private void Start()
         {
-            if (parentController == null || parentController.Tests == null)
+            if (parentController == null)
             {
-                Debug.LogError("Test scripts were not linked!");
+                Debug.LogError("Parent controller not linked!");
                 return;
             }
-
-            if(randomScatterTestButton != null)
+            
+            if (dataStructureDropdown != null)
             {
-                randomScatterTestButton.onClick.RemoveAllListeners();
-                randomScatterTestButton.onClick.AddListener(parentController.Tests.RandomScatterTest);
+                List<string> dataStructures = parentController.GetDataStructures();
+                if (dataStructures.Count > 0)
+                {
+                    dataStructureDropdown.AddOptions(dataStructures);
+                }
             }
 
-            if (gridTestButton != null)
+            if (testSelectionDropdown != null)
             {
-                gridTestButton.onClick.RemoveAllListeners();
-                gridTestButton.onClick.AddListener(parentController.Tests.GridTest);
+                List<string> tests = parentController.GetTestList();
+                if (tests.Count > 0)
+                {
+                    testSelectionDropdown.AddOptions(tests);
+                }
+            }
+
+            if (startButton != null)
+            {
+                startButton.onClick.RemoveAllListeners();
+                startButton.onClick.AddListener(parentController.StartSimulation);
+            }
+
+            if (resetButton != null)
+            {
+                resetButton.onClick.RemoveAllListeners();
+                resetButton.onClick.AddListener(parentController.ResetSimulation);
             }
 
         }
