@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using SpatialPartitioning.Quadtree;
+using SpatialPartitioning;
 
 public static partial class ConfigSettings
 {

@@ -4,8 +4,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-using SpatialPartitioning.Quadtree;
-using SpatialPartitioning.SpatialHash;
+using SpatialPartitioning;
 
 public class OldTestScripts : MonoBehaviour
 {
@@ -311,7 +310,6 @@ public class OldTestScripts : MonoBehaviour
 		objectList.Add(item);
 		//spatialHash.Insert(item);
 		Debug.Log(item.transform.position);
-		Debug.Log(spatialHash.DisplayItems());
 	}
 		
 	public void StepSpatialHashGridTestAdd()
@@ -322,7 +320,6 @@ public class OldTestScripts : MonoBehaviour
 		objectList.Add(item);
 		//spatialHash.Insert(item);
 		Debug.Log(item.transform.position);
-		Debug.Log(spatialHash.DisplayItems());
 	}
 		
 	public void StepTestRemove()
@@ -331,7 +328,6 @@ public class OldTestScripts : MonoBehaviour
 		//quadtree.RemoveItem(item);
 		objectList.Remove(item);
 		Debug.Log(item.transform.position);
-		Debug.Log(quadtree.DisplayItems());
 	}
 		
 		

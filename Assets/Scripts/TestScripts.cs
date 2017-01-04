@@ -6,8 +6,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 using SpatialPartitioning;
-using SpatialPartitioning.Quadtree;
-using SpatialPartitioning.SpatialHash;
 
 public class TestScripts : MonoBehaviour
 {

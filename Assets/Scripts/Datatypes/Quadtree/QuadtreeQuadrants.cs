@@ -1,4 +1,4 @@
-﻿namespace SpatialPartitioning.Quadtree
+﻿namespace SpatialPartitioning
 {
     public enum Quadrants
     {

@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SpatialPartitioning.Quadtree
+namespace SpatialPartitioning
 {
     public partial class Quadtree
     {

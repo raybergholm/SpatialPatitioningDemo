@@ -4,7 +4,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SpatialPartitioning.SpatialHash
+namespace SpatialPartitioning
 {
     // works with point-like structures and AABB bounding volumes. Use Vector3 arguments for point-likes, or Bounds for AABB. Since bounding volumes occupy a volume of space, they can occupy multiple buckets, while point-likes can only occupy one at a time
 

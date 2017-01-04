@@ -6,6 +6,9 @@ namespace SpatialPartitioning
     {
         private SimulationController controller;
 
+        private Quadtree quadtree;
+        private SpatialHash spatialHash;
+
         [SerializeField]
         private Bounds plane2D;
 
