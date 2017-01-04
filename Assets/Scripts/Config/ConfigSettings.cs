@@ -1,5 +1,4 @@
-﻿using SpatialPartitioning.Quadtree;
-using SpatialPartitioning.SpatialHash;
+﻿using SpatialPartitioning;
 
 public static partial class ConfigSettings
 {

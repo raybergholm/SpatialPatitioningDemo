@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SpatialPartitioning.Quadtree
+namespace SpatialPartitioning
 {
     public partial class Quadtree
     {
@@ -99,11 +99,6 @@ namespace SpatialPartitioning.Quadtree
         public void DebugDisplayNodes()
         {
             //root.TraverseDepthFirstPreOrder(root.DebugDisplayNodes);
-        }
-
-        public string DisplayItems()
-        {
-            return "";
         }
 
         public override string ToString()
