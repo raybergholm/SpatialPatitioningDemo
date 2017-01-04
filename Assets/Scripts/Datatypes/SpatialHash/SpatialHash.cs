@@ -10,7 +10,7 @@ namespace SpatialPartitioning.SpatialHash
 
     public class SpatialHash
     {
-        private Hashtable buckets;
+        private Dictionary<string, List<GameObject>> buckets;
         // granularity controls: number of cells = dimension length / bucketSize.
         private int bucketSizeX;
         private int bucketSizeY;
@@ -21,7 +21,7 @@ namespace SpatialPartitioning.SpatialHash
         {
             this.bucketSizeX = this.bucketSizeY = this.bucketSizeZ = bucketSize;
 
-            buckets = new Hashtable();
+            buckets = new Dictionary<string, List<GameObject>>();
         }
 
         public SpatialHash(Vector3 bucketSize) // buckets will be whatever size specified
@@ -29,14 +29,26 @@ namespace SpatialPartitioning.SpatialHash
             this.bucketSizeX = (int)bucketSize.x;
             this.bucketSizeY = (int)bucketSize.y;
             this.bucketSizeZ = (int)bucketSize.z;
-            buckets = new Hashtable();
+
+            buckets = new Dictionary<string, List<GameObject>>();
         }
 
         public ICollection Keys { get { return buckets.Keys; } }
 
-        public int bucketCount { get { return buckets.Count; } }
+        public int BucketCount { get { return buckets.Count; } }
 
-        public int itemCount { get { int count = 0; foreach (List<GameObject> bucket in buckets) { count += bucket.Count; } return count; } } // TODO: YAGNI?
+        public int ItemCount
+        {
+            get
+            {
+                int count = 0;
+                foreach (List<GameObject> bucket in buckets.Values)
+                {
+                    count += bucket.Count;
+                }
+                return count;
+            }
+        } // TODO: YAGNI?
 
         public bool Contains(Vector3 position)
         {
@@ -102,7 +114,7 @@ namespace SpatialPartitioning.SpatialHash
         public List<GameObject> GetItems(Vector3 position)
         {
             string key = ToKey(position);
-            return buckets.Contains(key) ? (List<GameObject>)buckets[key] : new List<GameObject>();
+            return buckets.ContainsKey(key) ? (List<GameObject>)buckets[key] : new List<GameObject>();
         }
 
         public List<GameObject> GetItems(Bounds bounds)
@@ -112,7 +124,7 @@ namespace SpatialPartitioning.SpatialHash
 
             foreach (string key in keys)
             {
-                if (buckets.Contains(key))
+                if (buckets.ContainsKey(key))
                 {
                     items.AddRange((List<GameObject>)buckets[key]);
                 }
@@ -126,7 +138,7 @@ namespace SpatialPartitioning.SpatialHash
             List<GameObject> bucket;
             foreach (string key in keys)
             {
-                if(!buckets.Contains(key))
+                if(!buckets.ContainsKey(key))
                 {
                     buckets.Add(key, new List<GameObject>());
                 }
@@ -141,7 +153,7 @@ namespace SpatialPartitioning.SpatialHash
             List<GameObject> bucket;
             string key = ToKey(position);
 
-            if(!buckets.Contains(key))
+            if(!buckets.ContainsKey(key))
             {
                 buckets.Add(key, new List<GameObject>());
             }
@@ -161,7 +173,7 @@ namespace SpatialPartitioning.SpatialHash
 
             foreach (string key in keys)
             {
-                if (buckets.Contains(key) && ((List<GameObject>)buckets[key]).Remove(item))
+                if (buckets.ContainsKey(key) && (buckets[key]).Remove(item))
                 {
                     removedItemsCount++;
                 }
@@ -172,7 +184,7 @@ namespace SpatialPartitioning.SpatialHash
         public bool Remove(Vector3 position, GameObject item)
         {
             string key = ToKey(position);
-            return buckets.Contains(key) ? ((List<GameObject>)buckets[key]).Remove(item) : false;
+            return buckets.ContainsKey(key) ? (buckets[key]).Remove(item) : false;
         }
 
         public int Remove(Bounds bounds, GameObject item)
