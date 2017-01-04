@@ -61,15 +61,7 @@ namespace SpatialPartitioning.SpatialHash
             Bounds bounds = item.GetComponent<Collider>().bounds;
             string key = ToKey(bounds.center);
 
-            if (buckets.ContainsKey(key))
-            {
-                List<GameObject> bucket = (List<GameObject>)buckets[key];
-                return bucket.Contains(item);
-            }
-            else
-            {
-                return false;
-            }
+            return buckets.ContainsKey(key) ? buckets[key].Contains(item) : false;
         }
 
         public string ToKey(Vector3 position)
@@ -114,7 +106,7 @@ namespace SpatialPartitioning.SpatialHash
         public List<GameObject> GetItems(Vector3 position)
         {
             string key = ToKey(position);
-            return buckets.ContainsKey(key) ? (List<GameObject>)buckets[key] : new List<GameObject>();
+            return buckets.ContainsKey(key) ? buckets[key] : new List<GameObject>();
         }
 
         public List<GameObject> GetItems(Bounds bounds)
@@ -126,7 +118,7 @@ namespace SpatialPartitioning.SpatialHash
             {
                 if (buckets.ContainsKey(key))
                 {
-                    items.AddRange((List<GameObject>)buckets[key]);
+                    items.AddRange(buckets[key]);
                 }
             }
 
@@ -135,31 +127,27 @@ namespace SpatialPartitioning.SpatialHash
 
         public void Insert(List<string> keys, GameObject item)
         {
-            List<GameObject> bucket;
             foreach (string key in keys)
             {
-                if(!buckets.ContainsKey(key))
+                if (!buckets.ContainsKey(key))
                 {
                     buckets.Add(key, new List<GameObject>());
                 }
 
-                bucket = (List<GameObject>)buckets[key];
-                bucket.Add(item);
+                buckets[key].Add(item);
             }
         }
 
         public void Insert(Vector3 position, GameObject item)
         {
-            List<GameObject> bucket;
             string key = ToKey(position);
 
-            if(!buckets.ContainsKey(key))
+            if (!buckets.ContainsKey(key))
             {
                 buckets.Add(key, new List<GameObject>());
             }
 
-            bucket = (List<GameObject>)buckets[key];
-            bucket.Add(item);
+            buckets[key].Add(item);
         }
 
         public void Insert(Bounds bounds, GameObject item)
@@ -173,7 +161,7 @@ namespace SpatialPartitioning.SpatialHash
 
             foreach (string key in keys)
             {
-                if (buckets.ContainsKey(key) && (buckets[key]).Remove(item))
+                if (buckets.ContainsKey(key) && buckets[key].Remove(item))
                 {
                     removedItemsCount++;
                 }
@@ -184,7 +172,7 @@ namespace SpatialPartitioning.SpatialHash
         public bool Remove(Vector3 position, GameObject item)
         {
             string key = ToKey(position);
-            return buckets.ContainsKey(key) ? (buckets[key]).Remove(item) : false;
+            return buckets.ContainsKey(key) ? buckets[key].Remove(item) : false;
         }
 
         public int Remove(Bounds bounds, GameObject item)
