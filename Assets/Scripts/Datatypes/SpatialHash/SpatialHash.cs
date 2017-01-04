@@ -32,20 +32,11 @@ namespace SpatialPartitioning.SpatialHash
             buckets = new Hashtable();
         }
 
-        public ICollection Keys
-        {
-            get { return buckets.Keys; }
-        }
+        public ICollection Keys { get { return buckets.Keys; } }
 
-        public int bucketCount
-        {
-            get { return buckets.Count; }
-        }
+        public int bucketCount { get { return buckets.Count; } }
 
-        public int itemCount
-        {
-            get { int count = 0; foreach (List<GameObject> bucket in buckets) { count += bucket.Count; } return count; }
-        } // TODO: YAGNI?
+        public int itemCount { get { int count = 0; foreach (List<GameObject> bucket in buckets) { count += bucket.Count; } return count; } } // TODO: YAGNI?
 
         public bool Contains(Vector3 position)
         {
@@ -135,7 +126,12 @@ namespace SpatialPartitioning.SpatialHash
             List<GameObject> bucket;
             foreach (string key in keys)
             {
-                bucket = buckets.Contains(key) ? (List<GameObject>)buckets[key] : new List<GameObject>();
+                if(!buckets.Contains(key))
+                {
+                    buckets.Add(key, new List<GameObject>());
+                }
+
+                bucket = (List<GameObject>)buckets[key];
                 bucket.Add(item);
             }
         }
@@ -145,7 +141,12 @@ namespace SpatialPartitioning.SpatialHash
             List<GameObject> bucket;
             string key = ToKey(position);
 
-            bucket = buckets.Contains(key) ? (List<GameObject>)buckets[key] : new List<GameObject>();
+            if(!buckets.Contains(key))
+            {
+                buckets.Add(key, new List<GameObject>());
+            }
+
+            bucket = (List<GameObject>)buckets[key];
             bucket.Add(item);
         }
 
