@@ -7,10 +7,14 @@ namespace SpatialPartitioning
         private SimulationController controller;
 
         private Quadtree quadtree;
+        public Quadtree Quadtree;
+
         private SpatialHash spatialHash;
+        public SpatialHash SpatialHash;
 
         [SerializeField]
         private Bounds plane2D;
+        public Bounds Plane2D { get { return plane2D; } }
 
         private void Awake()
         {
@@ -38,7 +42,6 @@ namespace SpatialPartitioning
                 Rect configPlane = new Rect(new Vector2(0, 0), new Vector2(ConfigSettings.DefaultSimulationBoundsHeight, ConfigSettings.DefaultSimulationBoundsWidth));
                 plane2D = new Bounds();
             }
-
         }
     }
 }
