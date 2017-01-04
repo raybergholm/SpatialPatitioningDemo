@@ -4,8 +4,6 @@ namespace SpatialPartitioning
 {
     public class SimulationModel : MonoBehaviour
     {
-
-
         private SimulationController controller;
 
         [SerializeField]
@@ -37,7 +35,7 @@ namespace SpatialPartitioning
                 Rect configPlane = new Rect(new Vector2(0, 0), new Vector2(ConfigSettings.DefaultSimulationBoundsHeight, ConfigSettings.DefaultSimulationBoundsWidth));
                 plane2D = new Bounds();
             }
-            
+
         }
     }
 }
