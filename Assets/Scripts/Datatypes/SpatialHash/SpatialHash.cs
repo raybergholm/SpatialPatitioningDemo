@@ -19,16 +19,16 @@ namespace SpatialPartitioning.SpatialHash
         // Constructor
         public SpatialHash(int bucketSize) // buckets will be square/cubic
         {
-            this.bucketSizeX = this.bucketSizeY = this.bucketSizeZ = bucketSize;
+            bucketSizeX = bucketSizeY = bucketSizeZ = bucketSize;
 
             buckets = new Dictionary<string, List<GameObject>>();
         }
 
         public SpatialHash(Vector3 bucketSize) // buckets will be whatever size specified
         {
-            this.bucketSizeX = (int)bucketSize.x;
-            this.bucketSizeY = (int)bucketSize.y;
-            this.bucketSizeZ = (int)bucketSize.z;
+            bucketSizeX = (int)bucketSize.x;
+            bucketSizeY = (int)bucketSize.y;
+            bucketSizeZ = (int)bucketSize.z;
 
             buckets = new Dictionary<string, List<GameObject>>();
         }
@@ -48,7 +48,7 @@ namespace SpatialPartitioning.SpatialHash
                 }
                 return count;
             }
-        } // TODO: YAGNI?
+        }
 
         public bool Contains(Vector3 position)
         {
@@ -66,15 +66,11 @@ namespace SpatialPartitioning.SpatialHash
 
         public string ToKey(Vector3 position)
         {
-            return ((int)Mathf.Floor(position.x / bucketSizeX) * bucketSizeX).ToString() + "," +
-                ((int)Mathf.Floor(position.y / bucketSizeY) * bucketSizeY).ToString() + "," +
-                ((int)Mathf.Floor(position.z / bucketSizeZ) * bucketSizeZ).ToString();
+            int bucketX = (int)Mathf.Floor(position.x / bucketSizeX) * bucketSizeX;
+            int bucketY = (int)Mathf.Floor(position.y / bucketSizeY) * bucketSizeY;
+            int bucketZ = (int)Mathf.Floor(position.z / bucketSizeZ) * bucketSizeZ;
 
-            // expanded version of above:
-            //int bucketX = (int)Mathf.Floor(position.x / bucketSizeX) * bucketSizeX;
-            //int bucketY = (int)Mathf.Floor(position.y / bucketSizeY) * bucketSizeY;
-            //int bucketZ = (int)Mathf.Floor(position.z / bucketSizeZ) * bucketSizeZ;
-            //return bucketX.ToString() + "," + bucketY.ToString() + "," + bucketZ.ToString();
+            return bucketX.ToString() + "," + bucketY.ToString() + "," + bucketZ.ToString();
         }
 
         public List<string> ToKeys(Bounds bounds) // convert a given AABB to a list of all the buckets it encompasses
@@ -196,11 +192,6 @@ namespace SpatialPartitioning.SpatialHash
             // Worse case scenario: removeFrom == sourceKeys && insertTo == destinationKeys means that the max number of Insert and Remove calls occurs here
             Remove(removeFrom, item);
             Insert(insertTo, item);
-        }
-
-        public string DisplayItems()
-        {
-            return "";
         }
     }
 }
