@@ -7,6 +7,8 @@ namespace SpatialPartitioning
 {
     public partial class Quadtree
     {
+        public delegate void NodeEventHandler(QuadtreeNode node);
+
         // Members
         private readonly QuadtreeNode root;
         public readonly int maxItems;
@@ -96,6 +98,14 @@ namespace SpatialPartitioning
             q.Enqueue(root);
 
             // TODO: queue up the node then do stuff to it
+        }
+
+        public void Traverse(NodeEventHandler callback)
+        {
+            while(true)
+            {
+
+            }
         }
 
         public void DebugDisplayNodes()
