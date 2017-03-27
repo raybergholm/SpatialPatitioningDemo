@@ -26,7 +26,9 @@ namespace SpatialPartitioning
         /// Creates the Quadtree covering an area of size Bounds, with default values for max items per node and max tree depth.
         /// </summary>
         /// <param name="bounds">Axis-Aligned Bounding Box representation of the area covered by this Quadtree</param>
-        public Quadtree(Bounds bounds) : this(bounds, ConfigSettings.DefaultQuadtreeMaxItemsPerNode, ConfigSettings.DefaultQuadtreeMaxTreeDepth, ConfigSettings.DefaultQuadtreeMode) { }
+        public Quadtree(Bounds bounds) : this(bounds, ConfigSettings.DefaultQuadtreeMaxItemsPerNode, ConfigSettings.DefaultQuadtreeMaxTreeDepth, ConfigSettings.DefaultQuadtreeMode)
+        {
+        }
 
         /// <summary>
         /// Creates the Quadtree covering an area of size Bounds and user-defined values for max items per node and max tree depth.
@@ -46,9 +48,9 @@ namespace SpatialPartitioning
             return root.IsOutOfBounds(target) ? null : root.GetNode(target);
         }
 
-        public List<CollidableEntity> GetItems()
+        public List<ICollidableEntity> GetItems()
         {
-            return new List<CollidableEntity>(); // TODO: method not finished
+            return new List<ICollidableEntity>(); // TODO: method not finished
         }
 
         //public List<QuadtreeNode> GetOverlappingNodes(Bounds target)
@@ -71,17 +73,17 @@ namespace SpatialPartitioning
         //    return nodes;
         //}
 
-        public void InsertItem(CollidableEntity item)
+        public void InsertItem(ICollidableEntity item)
         {
             root.InsertItem(item);
         }
 
-        public bool RemoveItem(CollidableEntity item)
+        public bool RemoveItem(ICollidableEntity item)
         {
             return root.RemoveItem(item);
         }
 
-        public List<CollidableEntity> GetItemsByArea(Bounds target)
+        public List<ICollidableEntity> GetItemsByArea(Bounds target)
         {
             return root.GetItemsByArea(target);
         }
