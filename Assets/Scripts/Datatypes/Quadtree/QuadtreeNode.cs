@@ -17,16 +17,36 @@ namespace SpatialPartitioning
             private readonly int level;
             private readonly QuadtreeNode parentNode;
 
+            #region Constants
+            private const int CHILD_NODE_AMOUNT = 4;   // Quadtrees have 4 child nodes. Changing this would change the tree type
+            #endregion
+
+            #region Statics
+            private static int nodeCount = 0;
+            #endregion
+
             private List<ICollidableEntity> items;
             public List<ICollidableEntity> Items { get { return items; } }
 
             private QuadtreeNode[] children;   // recursive, each node may have child nodes
             public QuadtreeNode[] Children { get { return children; } }
 
-            private static int nodeCount = 0;
+            public bool IsLeaf
+            {
+                get
+                {
+                    return children[0] == null; // all child nodes are instantiated or removed together, so to test if this is a leaf, just checking if the first child is null is sufficient
+                }
+            }
 
-            // Constants
-            private const int CHILD_NODE_AMOUNT = 4;   // Quadtrees have 4 child nodes. Changing this would change the tree type
+            public bool AreChildrenEmpty
+            {
+                get
+                {
+                    return items.Count == GetCount(); // if current node item count == current node + all descendants' item counts, then descendants are empty
+                }
+            }
+
 
             // Constructors
             public QuadtreeNode(Quadtree owner, Bounds bounds, int level, string id = "", QuadtreeNode parentNode = null)
@@ -46,7 +66,7 @@ namespace SpatialPartitioning
             #region Items
             public void InsertItem(ICollidableEntity item)
             {
-                if (!IsLeaf())
+                if (!IsLeaf)
                 {
                     int quadrant = MatchQuadrant(item.GetBoundingBox());
 
@@ -69,7 +89,7 @@ namespace SpatialPartitioning
             {
                 bool returnValue = items.Remove(item);
 
-                if (!IsLeaf() && AreChildrenEmpty())
+                if (!IsLeaf && AreChildrenEmpty)
                 {
                     RemoveChildren(); // all descendants empty, delete
                 }
@@ -86,16 +106,11 @@ namespace SpatialPartitioning
                 return items.Contains(item);
             }
 
-            public bool AreChildrenEmpty()
-            {
-                return items.Count == GetCount(); // if current node item count == current node + all descendants' item counts, then descendants are empty
-            }
-
             public int GetCount()
             {
                 int count = items.Count;
 
-                if (!IsLeaf())
+                if (!IsLeaf)
                 {
                     for (int i = 0; i < children.Length; i++)
                     {
@@ -111,7 +126,7 @@ namespace SpatialPartitioning
             {
                 List<ICollidableEntity> collisionCandidates = new List<ICollidableEntity>();
                 // use IsOverlapping and going deeper into children
-                if (!IsLeaf())
+                if (!IsLeaf)
                 {
                     for (int i = 0; i < children.Length; i++)
                     {
@@ -142,7 +157,7 @@ namespace SpatialPartitioning
 
             public QuadtreeNode GetNode(Bounds target)
             {
-                if (!IsLeaf())
+                if (!IsLeaf)
                 {
                     for (int i = 0; i < children.Length; i++)
                     {
@@ -153,13 +168,6 @@ namespace SpatialPartitioning
                     }
                 }
                 return this;
-            }
-
-
-
-            public bool IsLeaf()
-            {
-                return children[0] == null; // all child nodes are instantiated or removed together, so to test if this is a leaf, just checking if the first child is null is sufficient
             }
 
             public void RemoveChildren()
@@ -173,7 +181,7 @@ namespace SpatialPartitioning
             public int MatchQuadrant(Bounds target)
             {
                 int index = -1;
-                if (IsLeaf())
+                if (IsLeaf)
                 {
                     bool north = target.center.y - target.extents.y < bounds.center.y;
                     bool south = target.center.y + target.extents.y > bounds.center.y;
@@ -239,7 +247,7 @@ namespace SpatialPartitioning
 
             public void Split()
             {
-                if (IsLeaf() && level < owner.maxLevels)
+                if (IsLeaf && level < owner.maxLevels)
                 {
                     Vector3 childSize = bounds.extents / 2;
 
@@ -266,7 +274,7 @@ namespace SpatialPartitioning
             public int CountNodes()
             {
                 int count = 1;
-                if (!IsLeaf())
+                if (!IsLeaf)
                 {
                     foreach (QuadtreeNode child in children)
                     {
@@ -275,44 +283,6 @@ namespace SpatialPartitioning
                 }
                 return count;
             }
-
-            #region Tree traversal
-            public void TraverseDepthFirstPreOrder(Func<int> delegateMethod)
-            {
-                delegateMethod();
-                if (!IsLeaf())
-                {
-                    foreach (QuadtreeNode child in children)
-                    {
-                        child.TraverseDepthFirstPreOrder(delegateMethod);
-                    }
-                }
-            }
-
-            public void TraverseDepthFirstInOrder(Func<int> delegateMethod)
-            {
-                if (!IsLeaf())
-                {
-                    foreach (QuadtreeNode child in children)
-                    {
-                        child.TraverseDepthFirstInOrder(delegateMethod);
-                        delegateMethod();
-                    }
-                }
-            }
-
-            public void TraverseDepthFirstPostOrder(Func<int> delegateMethod)
-            {
-                if (!IsLeaf())
-                {
-                    foreach (QuadtreeNode child in children)
-                    {
-                        child.TraverseDepthFirstPostOrder(delegateMethod);
-                    }
-                }
-                delegateMethod();
-            }
-            #endregion
 
             #region Debug
             public bool AssertItemsInBounds()

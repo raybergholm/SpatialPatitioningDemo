@@ -7,6 +7,14 @@ namespace SpatialPartitioning
 {
     public partial class Quadtree
     {
+        [Flags]
+        public enum TraversalFlags
+        {
+            PreOrder = 1,
+            InOrder = 2,
+            PostOrder = 4
+        }
+
         public delegate void NodeEventHandler(QuadtreeNode node);
 
         // Members
@@ -92,7 +100,7 @@ namespace SpatialPartitioning
 
         public void TraverseBreadthFirst(Func<int> delegateMethod)
         {
-            Queue<QuadtreeNode> q = new Queue<QuadtreeNode>();
+            Queue<QuadtreeNode> nodeQueue = new Queue<QuadtreeNode>();
             QuadtreeNode nodePointer = root;
 
             q.Enqueue(root);
@@ -100,13 +108,65 @@ namespace SpatialPartitioning
             // TODO: queue up the node then do stuff to it
         }
 
-        public void Traverse(NodeEventHandler callback)
+        #region Tree traversal
+        public void TraverseDepthFirst(NodeEventHandler delegateMethod, TraversalFlags traversalMode)
         {
-            while(true)
+            QuadtreeNode currentNode = root;
+            if((traversalMode & TraversalFlags.PreOrder) == TraversalFlags.PreOrder)
             {
+                delegateMethod(currentNode);
+            }
+            if(!currentNode.IsLeaf)
+            {
+                foreach(QuadtreeNode child in currentNode.Children)
+                {
+                    currentNode = child;
 
+                }
+            }
+
+            if ((traversalMode & TraversalFlags.PostOrder) == TraversalFlags.PostOrder)
+            {
+                delegateMethod(currentNode);
             }
         }
+
+        public void TraverseDepthFirstPreOrder(NodeEventHandler delegateMethod)
+        {
+            delegateMethod(this);
+            if (!IsLeaf())
+            {
+                foreach (QuadtreeNode child in children)
+                {
+                    child.TraverseDepthFirstPreOrder(delegateMethod);
+                }
+            }
+        }
+
+        public void TraverseDepthFirstInOrder(NodeEventHandler delegateMethod)
+        {
+            if (!IsLeaf())
+            {
+                foreach (QuadtreeNode child in children)
+                {
+                    child.TraverseDepthFirstInOrder(delegateMethod);
+                    delegateMethod(child);
+                }
+            }
+        }
+
+        public void TraverseDepthFirstPostOrder(NodeEventHandler delegateMethod)
+        {
+            if (!IsLeaf())
+            {
+                foreach (QuadtreeNode child in children)
+                {
+                    child.TraverseDepthFirstPostOrder(delegateMethod);
+                }
+            }
+            delegateMethod(this);
+        }
+        #endregion
 
         public void DebugDisplayNodes()
         {
