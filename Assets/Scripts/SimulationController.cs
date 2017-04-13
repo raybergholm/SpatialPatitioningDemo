@@ -15,9 +15,9 @@ namespace SpatialPartitioning
         }
 
         [SerializeField]
-        private OptionsPanelViewController optionsMenu;
+        private OptionsPanel optionsMenu;
         [SerializeField]
-        private PausePanelViewController pauseMenu;
+        private PausePanel pauseMenu;
 
         private SimulationModel model;
 
@@ -64,11 +64,11 @@ namespace SpatialPartitioning
         // Update is called once per frame
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.P))
             {
                 TogglePause();
             }
-            else if (Input.GetKeyDown(KeyCode.P))
+            else if (Input.GetKeyDown(KeyCode.O))
             {
                 ToggleOptionsMenu();
             }
@@ -86,6 +86,12 @@ namespace SpatialPartitioning
 
         public void StartSimulation()
         {
+            // steup steps:
+            // fetch the datastruct to be used
+            // fetch the test setup
+
+            // actually start it 
+
             Debug.Log("Simulation Started.");
         }
 

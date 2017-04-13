@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace SpatialPartitioning
 {
-    public class PausePanelViewController : BasePanelViewController
+    public class PausePanel : BasePanel
     {
         private void Awake()
         {

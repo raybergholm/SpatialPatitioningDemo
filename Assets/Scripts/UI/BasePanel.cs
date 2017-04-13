@@ -4,7 +4,7 @@ using System.Collections;
 namespace SpatialPartitioning
 {
 
-    public abstract class BasePanelViewController : MonoBehaviour
+    public abstract class BasePanel : MonoBehaviour
     {
         protected SimulationController parentController;
 

@@ -11,6 +11,7 @@ public class TestScripts : MonoBehaviour
     {
         RandomScatterTest,
         GridTest,
+        StaticGridTest,
         ManualTest
     }
 
@@ -38,7 +39,7 @@ public class TestScripts : MonoBehaviour
         return Enum.GetNames(typeof(TestTypes)).ToList();
     }
 
-    public void RandomScatterTest(int amount)
+    public void SetupRandomScatterTest(int amount)
     {
         List<GameObject> newItems = new List<GameObject>();
         for (int i = 0; i < amount; i++)
@@ -47,7 +48,7 @@ public class TestScripts : MonoBehaviour
         }
     }
 
-    public void GridTest(int amount)
+    public void SetupGridTest(int amount)
     {
         for (int i = 0; i < amount; i++)
         {
@@ -55,7 +56,12 @@ public class TestScripts : MonoBehaviour
         }
     }
 
-    public void ManualTest()
+    public void SetupStaticGridTest()
+    {
+
+    }
+
+    public void SetupManualTest()
     {
 
     }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SpatialPartitioning
 {
-    public class OptionsPanelViewController : BasePanelViewController
+    public class OptionsPanel : BasePanel
     {
         [SerializeField]
         private Dropdown dataStructureDropdown;
