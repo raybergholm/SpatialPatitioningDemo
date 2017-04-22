@@ -9,6 +9,7 @@ public class TestScripts : MonoBehaviour
 {
     enum TestTypes
     {
+        SanityTest,
         RandomScatterTest,
         GridTest,
         StaticGridTest,
@@ -64,6 +65,21 @@ public class TestScripts : MonoBehaviour
     public void SetupManualTest()
     {
 
+    }
+
+    public void DoSanityTest()
+    {
+        // test result if no items
+
+        // add one item to top left corner, test it went there (can just check each node's bounds)
+
+        // add one item to each other corner, test it work correctly
+
+        // add items to top left until it hits limit, test its all there
+
+        // add one more item to top left, it should split the results down into subnodes
+
+        // spray a load of random items in, test that everything went into the right node (bounds check for each node)
     }
 
     private GameObject GenerateItemRandom()
