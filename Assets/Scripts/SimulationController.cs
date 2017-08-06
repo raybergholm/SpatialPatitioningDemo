@@ -72,6 +72,10 @@ namespace SpatialPartitioning
             {
                 ToggleOptionsMenu();
             }
+            else if (Input.GetKeyDown(KeyCode.Space))
+            {
+                AddItemTest();
+            }
         }
 
         public List<string> GetDataStructures()
@@ -127,6 +131,11 @@ namespace SpatialPartitioning
                     Resume();
                 }
             }
+        }
+
+        public void AddItemTest()
+        {
+
         }
 
         public void Pause(bool showPauseMenu = true)

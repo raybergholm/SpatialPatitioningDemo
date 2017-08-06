@@ -6,6 +6,7 @@ namespace SpatialPartitioning
 
     public abstract class BasePanel : MonoBehaviour
     {
+        [SerializeField]
         protected SimulationController parentController;
 
         public bool IsVisible { get { return gameObject.activeSelf; } }
