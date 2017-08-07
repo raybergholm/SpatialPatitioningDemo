@@ -91,5 +91,10 @@ namespace SpatialPartitioning
         {
             base.Hide();
         }
+
+        public int GetDataStructure()
+        {
+            return dataStructureDropdown.value;
+        }
     }
 }

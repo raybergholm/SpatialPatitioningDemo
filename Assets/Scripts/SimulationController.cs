@@ -135,7 +135,11 @@ namespace SpatialPartitioning
 
         public void AddItemTest()
         {
-
+            if (model != null)
+            {
+                model.AddItem();
+                model.Validate();
+            }
         }
 
         public void Pause(bool showPauseMenu = true)

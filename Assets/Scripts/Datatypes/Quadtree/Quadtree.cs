@@ -98,6 +98,16 @@ namespace SpatialPartitioning
             // TODO: queue up the node then do stuff to it
         }
 
+        public void TraverseDepthFirst(Func<int> delegateMethod) // TODO: actual method
+        {
+            QuadtreeNode nodePointer = root;
+
+            if (root.Children.Length > 0) 
+            {
+
+            }
+        }
+
         public void DebugDisplayNodes()
         {
             //root.TraverseDepthFirstPreOrder(root.DebugDisplayNodes);
@@ -106,6 +116,11 @@ namespace SpatialPartitioning
         public override string ToString()
         {
             return root.ToString();
+        }
+
+        public void Validate()
+        {
+            TraverseDepthFirst(() => { return 1; }); // TODO: actual delegate
         }
     }
 }
